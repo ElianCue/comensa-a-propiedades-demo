@@ -1,0 +1,8 @@
+{
+  "name": "Comensaña Propiedades",
+  "description": "Bold, modern real estate agency platform for La Plata and surrounding areas, featuring an interactive map and property management system.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
