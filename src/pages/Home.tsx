@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, MapPin, TrendingUp, Users, ShieldCheck, SlidersHorizontal, ArrowUpDown, X } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useProperties } from '../hooks/useProperties';
 import { useFavorites } from '../hooks/useFavorites';
 import PropertyCard from '../components/PropertyCard';
