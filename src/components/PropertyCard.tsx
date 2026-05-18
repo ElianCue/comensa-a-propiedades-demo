@@ -70,7 +70,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, isFavorite
         <div className="flex items-center gap-2 mt-3">
           <Link
             to={`/propiedad/${property.id}`}
-            className="flex-1 bg-gray-900 hover:bg-gray-800 text-white py-2 rounded text-xs font-semibold transition-colors"
+            className="flex-1 bg-gray-900 hover:bg-gray-800 text-white py-2 rounded text-xs font-semibold transition-colors text-center"
           >
             Ver
           </Link>
@@ -79,24 +79,6 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property, index, isFavorite
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 rounded border border-gray-200 hover:bg-gray-50 transition-colors"
-          >
-            <MessageCircle className="w-4 h-4 text-gray-600" />
-          </a>
-        </div>
-      </div>
-        
-        <div className="flex items-center gap-2 mt-4">
-          <Link
-            to={`/propiedad/${property.id}`}
-            className="flex-1 bg-[#111] hover:bg-gray-800 text-white py-2.5 rounded-xl text-center text-[11px] font-bold transition-all shadow-sm active:scale-95"
-          >
-            Ver Detalle
-          </Link>
-          <a
-            href={`https://wa.me/542211234567?text=Hola! Estoy interesado en la propiedad: ${property.title}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-2.5 rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors"
           >
             <MessageCircle className="w-4 h-4 text-gray-600" />
           </a>
