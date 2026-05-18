@@ -5,6 +5,7 @@ import { useProperties } from '../hooks/useProperties';
 import { formatPrice, cn } from '../lib/utils';
 import { Property, SPECTRUM_COLORS } from '../types';
 import Logo from '../components/Logo';
+import { useToastContext } from '../context/ToastContext';
 
 export default function Admin() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -13,6 +14,7 @@ export default function Admin() {
   const { properties, addProperty, updateProperty, deleteProperty, toggleActive } = useProperties();
   const [editingProperty, setEditingProperty] = useState<Property | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { addToast } = useToastContext();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,8 +53,10 @@ export default function Admin() {
 
     if (editingProperty) {
       updateProperty(propertyData);
+      addToast('Propiedad actualizada correctamente', 'success');
     } else {
       addProperty(propertyData);
+      addToast('Propiedad creada correctamente', 'success');
     }
     setIsModalOpen(false);
   };
@@ -180,7 +184,7 @@ export default function Admin() {
                   <td className="px-6 py-6 font-bold text-sm text-blue-600">{p.operation}</td>
                   <td className="px-6 py-6">
                     <button
-                      onClick={() => toggleActive(p.id)}
+                      onClick={() => { toggleActive(p.id); addToast(p.active ? 'Propiedad desactivada' : 'Propiedad activada', 'info'); }}
                       className={cn(
                         "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition-colors",
                         p.active ? "bg-green-50 text-green-600" : "bg-gray-100 text-gray-400"
@@ -194,7 +198,7 @@ export default function Admin() {
                       <button onClick={() => { setEditingProperty(p); setIsModalOpen(true); }} className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all">
                         <Edit3 className="w-4 h-4" />
                       </button>
-                      <button onClick={() => deleteProperty(p.id)} className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all">
+                      <button onClick={() => { deleteProperty(p.id); addToast('Propiedad eliminada', 'success'); }} className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all">
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>

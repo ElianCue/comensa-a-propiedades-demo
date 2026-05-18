@@ -10,13 +10,13 @@
 
 @layer utilities {
   .spectrum-gradient {
-    background: linear-gradient(90deg, #10B981 0%, #06B6D4 14%, #3B82F6 28%, #8B5CF6 42%, #D946EF 56%, #EF4444 70%, #F59E0B 84%, #FBBF24 100%);
+    background: #111111;
   }
   
   .spectrum-line {
-    height: 4px;
+    height: 1px;
     width: 100%;
-    background: linear-gradient(90deg, #10B981 0%, #06B6D4 14%, #3B82F6 28%, #8B5CF6 42%, #D946EF 56%, #EF4444 70%, #F59E0B 84%, #FBBF24 100%);
+    background: #e5e5e5;
   }
   
   .spectrum-border-green { border-left-color: #10B981; }

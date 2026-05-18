@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, MessageCircle, Share2, MapPin, BedDouble, Bath, Maximize, Home, ShieldCheck, Clock, Check } from 'lucide-react';
-import { motion } from 'motion/react';
+import { ArrowLeft, MessageCircle, Share2, MapPin, BedDouble, Bath, Maximize, Home, ShieldCheck, Clock, Check, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -24,6 +24,7 @@ export default function PropertyDetail() {
   
   const property = properties.find(p => p.id === id);
   const related = properties.filter(p => p.id !== id && p.active).slice(0, 3);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   if (!property) {
     return (
@@ -98,13 +99,72 @@ export default function PropertyDetail() {
             <motion.div 
               key={i}
               whileHover={{ y: -5 }}
-              className="h-32 md:h-48 rounded-2xl overflow-hidden shadow-2xl border-4 border-white"
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setLightboxIndex(i)}
+              className="h-32 md:h-48 rounded-2xl overflow-hidden shadow-2xl border-4 border-white cursor-pointer"
             >
               <img src={img} alt="" className="w-full h-full object-cover" />
             </motion.div>
           ))}
         </div>
       </div>
+
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {lightboxIndex !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center"
+            onClick={() => setLightboxIndex(null)}
+          >
+            <button
+              onClick={(e) => { e.stopPropagation(); setLightboxIndex(null); }}
+              className="absolute top-6 right-6 p-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-10"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            <button
+              onClick={(e) => { 
+                e.stopPropagation(); 
+                setLightboxIndex(lightboxIndex > 0 ? lightboxIndex - 1 : property.images.length - 1);
+              }}
+              className="absolute left-6 p-4 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+            >
+              <ChevronLeft className="w-8 h-8" />
+            </button>
+
+            <button
+              onClick={(e) => { 
+                e.stopPropagation(); 
+                setLightboxIndex(lightboxIndex < property.images.length - 1 ? lightboxIndex + 1 : 0);
+              }}
+              className="absolute right-6 p-4 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+            >
+              <ChevronRight className="w-8 h-8" />
+            </button>
+
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="max-w-5xl max-h-[90vh] p-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img 
+                src={property.images[lightboxIndex]} 
+                alt=""
+                className="max-w-full max-h-[85vh] object-contain rounded-2xl" 
+              />
+              <div className="text-center mt-4 text-white/70 font-medium">
+                {lightboxIndex + 1} / {property.images.length}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-3 gap-16">
         {/* Main Content */}
@@ -195,16 +255,13 @@ export default function PropertyDetail() {
           <div className="p-10 rounded-[48px] bg-white border border-gray-100 shadow-2xl shadow-gray-200/50 space-y-8">
             <div className="flex items-center gap-6">
               <div className="relative">
-                <div className="w-20 h-20 rounded-3xl bg-gray-100 overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400" alt="" className="w-full h-full object-cover" />
-                </div>
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-blue-600 border-4 border-white flex items-center justify-center">
-                  <ShieldCheck className="w-4 h-4 text-white" />
+                <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
+                  <Home className="w-10 h-10 text-white" />
                 </div>
               </div>
               <div>
-                <h4 className="font-black text-xl">Santiago Comensaña</h4>
-                <p className="text-xs font-black text-blue-600 uppercase tracking-widest">Broker Inmobiliario</p>
+                <h4 className="font-black text-xl">Comensaña Propiedades</h4>
+                <p className="text-xs font-black text-blue-600 uppercase tracking-widest">Asesoría Inmobiliaria</p>
               </div>
             </div>
             
@@ -216,7 +273,7 @@ export default function PropertyDetail() {
 
             <div className="space-y-4">
               <a 
-                href={`https://wa.me/542211234567?text=Hola Santiago! Quiero consultar por: ${property.title}`} 
+                href={`https://wa.me/542211234567?text=Hola! Quiero consultar por: ${property.title}`} 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-3 w-full bg-[#25D366] text-white py-6 rounded-3xl font-black text-xl shadow-xl shadow-green-500/20 hover:scale-[1.02] active:scale-95 transition-all"
